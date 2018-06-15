@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">SoulWings</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_scanner2">Scanner2</string>
+
+
+    <string name="xls_file_name">TavishExcel</string>
+    <string name="msg_database_saved">Database Saved</string>
+    <string name="msg_an_error_has_occured_during_xls_file_creation">an_error_has_occured_during_xls_file_creation</string>
+    <string name="str_db_author">Tavish</string>
+    <string name="str_db_title">Soul Wings</string>
+    <string name="str_published_date">15/06/2018</string>
+</resources>

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".GoodsActivity">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="0.2"
+                android:text="BarCode"
+                android:textSize="15dp" />
+
+            <EditText
+                android:id="@+id/et_barcode_goods"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginRight="10dp"
+                />
+
+            <ImageButton
+                android:id="@+id/btn_scan_goods"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginRight="20dp"
+                android:background="?selectableItemBackground"
+                android:scaleType="fitXY"
+                android:src="@drawable/btn_qr_scan"
+                android:text="Store"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <RadioGroup
+                android:id="@+id/rb_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+            <RadioButton
+                android:id="@+id/rb_purchase"
+                android:text="Purchase"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <RadioButton
+                android:id="@+id/rb_sell"
+                android:text="Sell"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            </RadioGroup>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ll_purchase"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="Purchase Price"
+                android:textSize="15dp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="0.2"/>
+
+            <EditText
+                android:id="@+id/et_purch_price_goods"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_sell"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="Sell Price"
+                android:textSize="15dp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="0.2"/>
+
+            <EditText
+                android:id="@+id/et_sell_price_goods"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/btn_buy"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="left|center_horizontal"
+                android:layout_width="wrap_content"
+                android:text="BUY"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/btn_export"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="right|center_horizontal"
+                android:layout_width="wrap_content"
+                android:text="EXPORT TO XLS"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/btn_sell"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="right|center_horizontal"
+                android:layout_width="wrap_content"
+                android:text="SELL"
+                android:layout_height="wrap_content" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>
