@@ -77,7 +77,7 @@
                 android:layout_marginRight="20dp"
                 android:background="?selectableItemBackground"
                 android:scaleType="fitXY"
-                android:src="@drawable/btn_qr_scan"
+                android:src="@drawable/btn_qr_code_scan"
                 android:text="Store"/>
         </LinearLayout>
 

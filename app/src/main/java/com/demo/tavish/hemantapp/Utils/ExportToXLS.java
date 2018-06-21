@@ -94,10 +94,7 @@ public class ExportToXLS {
     public static void WriteToSheet(Cursor c, WritableSheet sheet) throws WriteException{
         Label label;
         for (int i = 0; i < c.getColumnCount(); i++) {
-            // Label(x,y,z) 代表单元格的第x+1列，第y+1行, 内容z
-            // 在Label对象的子对象中指明单元格的位置和内容
             label = new Label(i, 0, c.getColumnName(i), getHeader());
-            // 将定义好的单元格添加到工作表中
             sheet.addCell(label);
         }
 
@@ -130,19 +127,19 @@ public class ExportToXLS {
 
     public static WritableCellFormat getHeader() {
         WritableFont font = new WritableFont(WritableFont.TIMES, 10,
-                WritableFont.BOLD);// 定义字体
+                WritableFont.BOLD);
         try {
-            font.setColour(Colour.BLUE);// 蓝色字体
+            font.setColour(Colour.BLUE);
         } catch (WriteException e1) {
             e1.printStackTrace();
         }
         WritableCellFormat format = new WritableCellFormat(font);
         try {
-            format.setAlignment(jxl.format.Alignment.CENTRE);// 左右居中
-            format.setVerticalAlignment(jxl.format.VerticalAlignment.CENTRE);// 上下居中
+            format.setAlignment(jxl.format.Alignment.CENTRE);
+            format.setVerticalAlignment(jxl.format.VerticalAlignment.CENTRE);
             format.setBorder(Border.ALL, BorderLineStyle.THIN,
-                    Colour.BLACK);// 黑色边框
-            format.setBackground(Colour.YELLOW);// 黄色背景
+                    Colour.BLACK);
+            format.setBackground(Colour.YELLOW);
         } catch (WriteException e) {
             e.printStackTrace();
         }
