@@ -239,17 +239,21 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public Cursor totalSales_Month(){
 
-        Calendar c = Calendar.getInstance();
+      /*  Calendar c = Calendar.getInstance();
         int month = c.get(Calendar.MONTH)+1;
-        int year = c.get(Calendar.YEAR);
-        System.out.println(month);
+        int year = c.get(Calendar.YEAR);*/
+
+       /* System.out.println("This is my new year and month");
+        System.out.println(String.valueOf(Calendar.getInstance().get(Calendar.MONTH)+1)+String.valueOf(Calendar.getInstance().get(Calendar.YEAR)));*/
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM");
+        Date date = new Date();
+        System.out.println("This is my new year and month");
+        System.out.println(dateFormat.format(date));
         //  Date date = new Date();
         SQLiteDatabase db = this.getWritableDatabase();
         String query = " SELECT  SUM( "+ KEY_SELL_PRICE + " ) " + " FROM " + TABLE_NAME + " WHERE " +
-                KEY_SELL_DATE + " LIKE " +
-                dateFormat.format(Calendar.getInstance().get(Calendar.YEAR)+(Calendar.getInstance().get(Calendar.MONTH)+1));
+                KEY_SELL_DATE + " LIKE " +"'"+ dateFormat.format(date)+"%'";
         Cursor data = db.rawQuery(query,null);
         Log.d(TAG, DatabaseUtils.dumpCursorToString(data));
         return data;
