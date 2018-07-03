@@ -3,4 +3,12 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="color_goods_panel">#060A1C</color>
+    <color name="white">#EEEDED</color>
+
+
+    <color name="dark_sky_blue">#1762EE</color>
+    <color name="dark_sky_purple">#22419A</color>
+    <color name="color_white">#EEEDED</color>
+    <color name="colorText">#232a34</color>
 </resources>
