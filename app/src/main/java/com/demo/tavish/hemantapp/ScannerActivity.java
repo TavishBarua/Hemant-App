@@ -103,13 +103,13 @@ public class ScannerActivity extends AppCompatActivity implements AdapterView.On
         date_picker();
         _addData();
 
-        Btn_display.setOnClickListener(new View.OnClickListener() {
+      /*  Btn_display.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(ScannerActivity.this, ListDataActivity.class);
                 startActivity(i);
             }
-        });
+        });*/
 
     }
 

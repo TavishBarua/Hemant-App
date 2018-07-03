@@ -19,7 +19,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "soulWings.db";
 
-    private static final String TABLE_NAME = "hemant";
+   // private static final String TABLE_NAME = "hemant";
+   private static final String TABLE_NAME = "products";
     private static final String KEY_ID = "id";
     private static final String KEY_BARCODE = "barcode";
     private static final String KEY_TYPE = "type";
