@@ -15,4 +15,6 @@
     <string name="str_db_author">Tavish</string>
     <string name="str_db_title">Soul Wings</string>
     <string name="str_published_date">15/06/2018</string>
+
+    <string name="str_rupee_code">\u20B9</string>
 </resources>

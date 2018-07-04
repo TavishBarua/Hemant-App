@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.demo.tavish.hemantapp.Interface.ApiInterface;
 import com.demo.tavish.hemantapp.Models.ExcelDto;
 import com.demo.tavish.hemantapp.Models.ProductDto;
+import com.demo.tavish.hemantapp.Models.SumDto;
 import com.demo.tavish.hemantapp.Models.UserDto;
 import com.demo.tavish.hemantapp.Utils.Constants;
 import com.demo.tavish.hemantapp.Utils.RetroResponse.ApiClient;
@@ -325,7 +326,7 @@ public class InventoryActivity extends AppCompatActivity implements View.OnClick
                                 snackBarMessage("Product already exists in Database");
                             }
                         }else
-                            snackBarMessage("Servor Error");
+                            snackBarMessage("Something Went Wrong");
 
                     }catch(Exception e){
 
@@ -407,6 +408,8 @@ public class InventoryActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void addReturn(){
+
+        try{
         ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
         final ProductDto productDto = new ProductDto();
         productDto.setBarcodeId(s_barcode);
@@ -438,6 +441,8 @@ public class InventoryActivity extends AppCompatActivity implements View.OnClick
                     }
                 });
 
+        }catch (Exception e){e.printStackTrace();}
+
 
     }
 
@@ -456,7 +461,7 @@ public class InventoryActivity extends AppCompatActivity implements View.OnClick
                     if (response.body().getStatus()) {
 
 
-                        file_download(Constants.DOWNLOAD_URL+"soul_wings.xlsx");
+                        file_download(Constants.DOWNLOAD_URL+"excel.xlsx");
                         snackBarMessage("Successfully Exported to XLS");
                        /* try{
                         File path = Environment.getExternalStorageDirectory();
@@ -484,7 +489,6 @@ public class InventoryActivity extends AppCompatActivity implements View.OnClick
 
     }
 
-
         public void file_download(String url) {
             File direct = new File(Environment.getExternalStorageDirectory()
                     + "/tavish_files");
@@ -510,206 +514,19 @@ public class InventoryActivity extends AppCompatActivity implements View.OnClick
             snackBarMessage("Your File is Downloading...");
             mgr.enqueue(request);
 
+
         }
 
-        /*call.enqueue(new Callback<ApiResponse<ExcelDto>>() {
-            @Override
-            public void onResponse(Call<ApiResponse<ExcelDto>> call, Response<ApiResponse<ExcelDto>> response) {
-                try{
-
-                    if (response.isSuccessful()){
-
-                        if (response.body().getStatus()){
-
-                            snackBarMessage("XLS Exported Successfully");
-
-                        }else
-                            snackBarMessage("Failed To Export");
-
-                    }else snackBarMessage("Something Went Wrong");
-
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ApiResponse<ExcelDto>> call, Throwable t) {
-                snackBarMessage("Server Error");
-            }
-        });
-        */
-
-
-
-    /*public void addData(){
-
-        btn_buy_goods.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(et_barcode_goods.length()==0){
-                    et_barcode_goods.requestFocus();
-                    et_barcode_goods.setError("FIELD CANNOT BE EMPTY");
-                }else if(et_purch_price_goods.length()==0){
-                    et_purch_price_goods.requestFocus();
-                    et_purch_price_goods.setError("FIELD CANNOT BE EMPTY");
-
-                }else{
-                   try{
-                       if (s_barcode_goods== null){
-                           snackBarMessage("Barcode format is not correct");
-                           return;
-                       }else {
-                           JSONObject menuItemObject = new JSONObject(s_barcode_goods);
-
-                           s_barcode = menuItemObject.getString(MNU_BARCODE);
-                           s_type = menuItemObject.getString(MNU_TYPE);
-                           s_size = menuItemObject.getString(MNU_SIZE);
-                           //      s_purch_price = menuItemObject.getString(MNU_PURCHASE_PRICE);
-                           // s_date = menuItemObject.getString(MNU_DATE);
-
-
-                           s_purch_price=Float.parseFloat(et_purch_price_goods.getText().toString());
-
-                           addPurchase();
-
-                           Log.d(TAG,s_barcode);
-                           Log.d(TAG,s_type);
-                           Log.d(TAG,s_size);
-                           Log.d(TAG,String.valueOf(s_purch_price));
-                       }
-
-
-
-                   }catch (JSONException e){
-                       e.printStackTrace();
-                   }
-
-
-
-                }
-            }
-        });
-    }
-
-    private void addPurchase(){
+    /*public void sale_calculate(){
 
         try{
             ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
-            final ProductDto productDto = new ProductDto();
-            productDto.setBarcodeId(s_barcode);
-            productDto.setProductType(s_type);
-            productDto.setProductSize(Integer.parseInt(s_size));
-            productDto.setPuchasePrice(s_purch_price);
-            //productDto.setUserName();
-
-            Call<ApiResponse<ProductDto>> call = apiInterface.product_buy(productDto);
-
-            call.enqueue(new Callback<ApiResponse<ProductDto>>() {
-                @Override
-                public void onResponse(Call<ApiResponse<ProductDto>> call, Response<ApiResponse<ProductDto>> response) {
-
-                    try{
-                    if (response.isSuccessful()){
-
-                        if(response.body().getStatus()) {
-
-                            snackBarMessage("Product Added");
-                            System.out.println(productDto.getBarcodeId());
-                            System.out.println(productDto.getProductType());
-                            System.out.println(productDto.getProductSize());
-
-                        }else {
-                            snackBarMessage("Product already exists in Database");
-                        }
-                    }else
-                        snackBarMessage("Servor Error");
-
-                    }catch(Exception e){
-
-                        e.printStackTrace();
-                    }
-
-                }
-
-                @Override
-                public void onFailure(Call<ApiResponse<ProductDto>> call, Throwable t) {
-                    snackBarMessage("Server Error");
-                }
-            });
-
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    private void addSellData(){
-
-        btn_sell_goods.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(et_barcode_goods.length()==0){
-                    et_barcode_goods.requestFocus();
-                    et_barcode_goods.setError("FIELD CANNOT BE EMPTY");
-                }else if(et_purch_price_goods.length()==0){
-                    et_purch_price_goods.requestFocus();
-                    et_purch_price_goods.setError("FIELD CANNOT BE EMPTY");
-
-                }else{
-
-                    try{
-                    if (s_barcode_goods== null){
-                        snackBarMessage("Barcode format is not correct");
-                        return;
-                    }else{
-                        JSONObject menuItemObject = new JSONObject(s_barcode_goods);
-                        s_barcode = menuItemObject.getString(MNU_BARCODE);
-                        addSell();
-
-                    }
-                    }catch(JSONException e){e.printStackTrace();}
-
-                }
-            }
-        });
-
-    }
-
-    private void addSell(){
-
-        try{
-            ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
-            final ProductDto productDto = new ProductDto();
-            productDto.setBarcodeId(s_barcode);
-            productDto.setSellPrice(Float.parseFloat(et_sell_price_goods.getText().toString()));
-            productDto.setComment(et_comment.getText().toString());
-            //productDto.setUserName();
-            Call<ApiResponse<ProductDto>> call = apiInterface.product_sell(productDto);
-            call.enqueue(new Callback<ApiResponse<ProductDto>>() {
-                @Override
-                public void onResponse(Call<ApiResponse<ProductDto>> call, Response<ApiResponse<ProductDto>> response) {
-                    try{
-                        if(response.isSuccessful()){
-                            if (response.body().getStatus()){
-                                snackBarMessage("Product Successfully Sold");
-                            }else
-                                snackBarMessage("Not Available to Sell");
-                        }else
-                            snackBarMessage("Server Error");
-
-                    }catch (Exception e){e.printStackTrace();}
-                }
-
-                @Override
-                public void onFailure(Call<ApiResponse<ProductDto>> call, Throwable t) {
-
-                }
-            });
+           // Call<ApiResponseSingleObj<SumDto>> call = apiInterface.calculate_sum()
 
 
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+
+        }catch (Exception e){e.printStackTrace();}
+
     }*/
 
     private void requestStoragePermission() {
@@ -739,6 +556,8 @@ public class InventoryActivity extends AppCompatActivity implements View.OnClick
                     new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, Constants.STORAGE_PERMISSION_CODE);
         }
     }
+
+
 
 
 

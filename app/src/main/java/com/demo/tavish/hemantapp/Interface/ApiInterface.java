@@ -2,6 +2,7 @@ package com.demo.tavish.hemantapp.Interface;
 
 import com.demo.tavish.hemantapp.Models.ExcelDto;
 import com.demo.tavish.hemantapp.Models.ProductDto;
+import com.demo.tavish.hemantapp.Models.SumDto;
 import com.demo.tavish.hemantapp.Utils.RetroResponse.ApiResponse;
 import com.demo.tavish.hemantapp.Utils.RetroResponse.ApiResponseSingleObj;
 
@@ -30,4 +31,7 @@ public interface ApiInterface {
 
     @GET("product_buy/download_excel")
     Call<ApiResponseSingleObj<ExcelDto>> download_excel();
+
+    @POST("product_buy/sale_calculate")
+    Call<ApiResponseSingleObj<SumDto>> calculate_sale(@Header("dateFrom") long fromDate,@Header("dateTo") long toDate);
 }

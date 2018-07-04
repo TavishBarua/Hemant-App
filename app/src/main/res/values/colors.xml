@@ -11,4 +11,8 @@
     <color name="dark_sky_purple">#22419A</color>
     <color name="color_white">#EEEDED</color>
     <color name="colorText">#232a34</color>
+
+    <color name="color_light_grey">#9EA3A6</color>
+    <color name="color_dark_grey">#5E6163</color>
+
 </resources>
