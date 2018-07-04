@@ -1,8 +1,18 @@
 package com.demo.tavish.hemantapp;
 
+import android.Manifest;
+import android.app.DownloadManager;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.net.Uri;
+import android.os.Environment;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,17 +25,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.demo.tavish.hemantapp.Interface.ApiInterface;
+import com.demo.tavish.hemantapp.Models.ExcelDto;
 import com.demo.tavish.hemantapp.Models.ProductDto;
 import com.demo.tavish.hemantapp.Models.UserDto;
+import com.demo.tavish.hemantapp.Utils.Constants;
 import com.demo.tavish.hemantapp.Utils.RetroResponse.ApiClient;
 import com.demo.tavish.hemantapp.Utils.RetroResponse.ApiResponse;
+import com.demo.tavish.hemantapp.Utils.RetroResponse.ApiResponseSingleObj;
 import com.google.gson.Gson;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import org.apache.poi.util.IOUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 import retrofit2.Call;
@@ -73,6 +90,8 @@ public class InventoryActivity extends AppCompatActivity implements View.OnClick
         btn_sell_goods.setOnClickListener(this);
 
         btn_export = findViewById(R.id.btn_export);
+        btn_export.setOnClickListener(this);
+
         btn_return = findViewById(R.id.btn_return);
         btn_return.setOnClickListener(this);
 
@@ -261,6 +280,15 @@ public class InventoryActivity extends AppCompatActivity implements View.OnClick
                 }
                 break;
 
+            case R.id.btn_export:
+                if(ContextCompat.checkSelfPermission(InventoryActivity.this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+
+                    exportToExcel();
+
+                }else {
+                    requestStoragePermission();
+                }
 
         }
     }
@@ -328,14 +356,13 @@ public class InventoryActivity extends AppCompatActivity implements View.OnClick
             productDto.setSellPrice(Float.parseFloat(et_sell_price_goods.getText().toString()));
             productDto.setComment(""+et_comment.getText());
 
-          /*  UserDto userDto = new UserDto();
+            UserDto userDto = new UserDto();
             userDto.setUserName("pawan");
-            productDto.setUserName(userDto);*/
           //  final String userName = String.valueOf(userDto.getUserName());
 
             //productDto.setUserName();
             Call<ApiResponse<ProductDto>> call = apiInterface.product_sell(productDto.getBarcodeId(),
-                    productDto.getSellPrice(),productDto.getComment(),"tavish" );
+                    productDto.getSellPrice(),productDto.getComment(),userDto.getUserName() );
             call.enqueue(new Callback<ApiResponse<ProductDto>>() {
                 @Override
                 public void onResponse(Call<ApiResponse<ProductDto>> call, Response<ApiResponse<ProductDto>> response) {
@@ -345,14 +372,12 @@ public class InventoryActivity extends AppCompatActivity implements View.OnClick
                             // Log.d(TAG,"Response Successfull");
                             if (response.body().getStatus()){
                                 snackBarMessage("Product Successfully Sold");
-                                Log.d(TAG,"Product Successfully Sold");
                             }else {
                                 snackBarMessage("Not Available to Sell");
                             }
 
                         }else{
-                            response.code();
-                            snackBarMessage("Server Error");
+                            snackBarMessage("Something Went Wrong");
                         }
                        /* if(response.isSuccessful()){
                             if (response.body().getStatus()){
@@ -371,7 +396,7 @@ public class InventoryActivity extends AppCompatActivity implements View.OnClick
 
                 @Override
                 public void onFailure(Call<ApiResponse<ProductDto>> call, Throwable t) {
-                    snackBarMessage("Error Hai be...");
+                    snackBarMessage("Server Error");
                 }
             });
 
@@ -402,18 +427,118 @@ public class InventoryActivity extends AppCompatActivity implements View.OnClick
                             }
 
                         }else
-                            snackBarMessage("Server Error");
+                            snackBarMessage("Something Went Wrong");
+
                         }catch(Exception e){e.printStackTrace();}
                     }
 
                     @Override
                     public void onFailure(Call<ApiResponse<ProductDto>> call, Throwable t) {
-
+                        snackBarMessage("Server Error");
                     }
                 });
 
 
     }
+
+    private void exportToExcel() {
+
+        ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
+        Call<ApiResponseSingleObj<ExcelDto>> call = apiInterface.download_excel();
+
+
+        call.enqueue(new Callback<ApiResponseSingleObj<ExcelDto>>() {
+            @Override
+            public void onResponse(Call<ApiResponseSingleObj<ExcelDto>> call, Response<ApiResponseSingleObj<ExcelDto>> response) {
+
+                if (response.isSuccessful()) {
+
+                    if (response.body().getStatus()) {
+
+
+                        file_download(Constants.DOWNLOAD_URL+"soul_wings.xlsx");
+                        snackBarMessage("Successfully Exported to XLS");
+                       /* try{
+                        File path = Environment.getExternalStorageDirectory();
+                        File file = new File(path, "soul_wings.xlsx");
+                        FileOutputStream fileOutputStream = new FileOutputStream(file);
+                       // IOUtils.write(response.body().bytes(), fileOutputStream);
+
+                        snackBarMessage("Successfully Exported to XLS");
+                        }catch (FileNotFoundException e){e.printStackTrace();}
+*/
+                    } else {
+                        snackBarMessage("Failed To Export");
+                    }
+
+                } else {
+                    snackBarMessage("Something Went Wrong");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponseSingleObj<ExcelDto>> call, Throwable t) {
+                snackBarMessage("Server Error");
+            }
+        });
+
+    }
+
+
+        public void file_download(String url) {
+            File direct = new File(Environment.getExternalStorageDirectory()
+                    + "/tavish_files");
+
+            if (!direct.exists()) {
+                direct.mkdirs();
+            }
+
+            DownloadManager mgr = (DownloadManager) this.getSystemService(Context.DOWNLOAD_SERVICE);
+
+            Uri downloadUri = Uri.parse(url);
+            DownloadManager.Request request = new DownloadManager.Request(
+                    downloadUri);
+
+            request.setAllowedNetworkTypes(
+                    DownloadManager.Request.NETWORK_WIFI
+                            | DownloadManager.Request.NETWORK_MOBILE)
+                    .setAllowedOverRoaming(false).setTitle("Soul Wings Report File")
+                    .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+                    .setDescription("Downloading File")
+                    .setDestinationInExternalPublicDir("/tavish_files", "soul_wings.xlsx");
+
+            snackBarMessage("Your File is Downloading...");
+            mgr.enqueue(request);
+
+        }
+
+        /*call.enqueue(new Callback<ApiResponse<ExcelDto>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<ExcelDto>> call, Response<ApiResponse<ExcelDto>> response) {
+                try{
+
+                    if (response.isSuccessful()){
+
+                        if (response.body().getStatus()){
+
+                            snackBarMessage("XLS Exported Successfully");
+
+                        }else
+                            snackBarMessage("Failed To Export");
+
+                    }else snackBarMessage("Something Went Wrong");
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<ExcelDto>> call, Throwable t) {
+                snackBarMessage("Server Error");
+            }
+        });
+        */
 
 
 
@@ -587,6 +712,33 @@ public class InventoryActivity extends AppCompatActivity implements View.OnClick
         }
     }*/
 
+    private void requestStoragePermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+            new AlertDialog.Builder(this)
+                    .setTitle("Permission needed")
+                    .setMessage("This permission is needed because of this and that")
+                    .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ActivityCompat.requestPermissions(InventoryActivity.this,
+                                    new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, Constants.STORAGE_PERMISSION_CODE);
+                        }
+                    })
+                    .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .create().show();
+
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, Constants.STORAGE_PERMISSION_CODE);
+        }
+    }
 
 
 
